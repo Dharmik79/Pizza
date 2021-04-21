@@ -10,7 +10,8 @@ app.use(expressLayout);
 app.set('views',path.join(__dirname,'/resources/views'))
 app.set('view engine','ejs')
 
-
+// Assests
+app.use(express.static('public'))
 app.listen(PORT,()=>{
     console.log(`server is started at ${PORT}`);
 })
