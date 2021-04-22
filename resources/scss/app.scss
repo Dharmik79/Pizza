@@ -48,6 +48,10 @@ section.hero
     &:hover{
         background:$primary-hover;
     }
+    &:focus
+    {
+        outline: none;
+    }
 }
 section.cart
 {

@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const session= require('express-session');
 const flash = require('express-flash');
 const MongoDbStore=require('connect-mongodb-session')(session);
+const passport=require('passport')
 
 
 
@@ -27,6 +28,9 @@ conncetion.once('open', () => {
 }).catch(err => {
     console.log("Database Connection Failed");
 })
+
+
+
 
 //Session Store
 let mongoStore=new MongoDbStore({
@@ -50,15 +54,23 @@ app.use(session({
 
 }))
 
+// Passport config
+const passportInit=require('./app/config/passport')
+passportInit(passport)
+app.use(passport.initialize())
+app.use(passport.session())
+
 // Global middlware
 
 app.use((req,res,next)=>{
     res.locals.session =req.session,
+    res.locals.user=req.user
     next()
 })
 
 
 app.use(flash())
+app.use(express.urlencoded({extended:false}))
 app.use(express.json())
 
 // set Template engine
