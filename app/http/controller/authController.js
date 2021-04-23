@@ -17,6 +17,15 @@ function authController() {
         },
 
         async postlogin(req, res, next) {
+            const {
+                email,
+                password
+            } = req.body;
+            if (!email || !password) {
+                req.flash('error', 'All fileds are required');
+                req.flash('email', email)
+                return res.redirect('/login')
+            }
             passport.authenticate('local', (err, user, info) => {
                 if (err) {
                     req.flash('error', info.message)
