@@ -4,6 +4,9 @@ const passport = require('passport')
 
 function authController() {
     // Factory functions  - a function that returns object 
+const _getRedirectUrl = (req) => {
+        return req.user.role === 'admin' ? '/admin/orders' : '/customers/order'
+    }
 
     return {
         // index method for read
@@ -42,7 +45,7 @@ function authController() {
 
                         return next(err);
                     }
-                    return res.redirect('/')
+                    return res.redirect(_getRedirectUrl(req))
                 });
 
             })(req,res,next);

@@ -10,7 +10,7 @@ const session= require('express-session');
 const flash = require('express-flash');
 const MongoDbStore=require('connect-mongodb-session')(session);
 const passport=require('passport')
-
+var favicon = require('serve-favicon')
 
 
 // DataBase Connection
@@ -73,6 +73,7 @@ app.use(flash())
 app.use(express.urlencoded({extended:false}))
 app.use(express.json())
 
+
 // set Template engine
 app.use(expressLayout);
 
@@ -81,10 +82,9 @@ app.set('view engine', 'ejs');
 
 require('./routes/web')(app);
 
-
-
 // Assests
 app.use(express.static('public'))
+app.use(favicon(__dirname + '/public/favicon.ico'));
 app.listen(PORT, () => {
     console.log(`server is started at ${PORT}`);
 })
