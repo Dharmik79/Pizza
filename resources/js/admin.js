@@ -1,7 +1,8 @@
 import axios from 'axios'
 import moment from 'moment'
+import Noty from 'noty'
 
- function  initAdmin() {
+export function initAdmin(socket) {
     const orderTableBody = document.querySelector('#orderTableBody')
     let orders = []
     let markup
@@ -11,9 +12,9 @@ import moment from 'moment'
             "X-Requested-With": "XMLHttpRequest"
         }
     }).then(res => {
-        
+
         orders = res.data
-        console.log(orders)
+
         markup = generateMarkup(orders)
         orderTableBody.innerHTML = markup
     }).catch(err => {
@@ -77,6 +78,15 @@ import moment from 'moment'
         `
         }).join('')
     }
+    socket.on('orderPlaced',(data)=>{
+          new Noty({
+            type: "success",
+            timeout: 100,
+            progressBar: false,
+            text: 'New Order',
+        }).show();
+        orders.unshift(data)
+        orderTableBody.innerHTML=''
+        orderTableBody.innerHTML=generateMarkup(orders)
+    })
 }
-
-module.exports=initAdmin

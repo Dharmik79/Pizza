@@ -11,6 +11,7 @@ const flash = require('express-flash');
 const MongoDbStore=require('connect-mongodb-session')(session);
 const passport=require('passport')
 var favicon = require('serve-favicon')
+const Emitter=require('events')
 
 
 // DataBase Connection
@@ -39,6 +40,10 @@ let mongoStore=new MongoDbStore({
     collection:'session',
 });
 
+//Event Emiiter for passing socket to controller
+
+const eventEmitter=new Emitter()
+app.set('eventEmitter',eventEmitter)
 
 // Session config
 // Middleware 
@@ -85,6 +90,25 @@ require('./routes/web')(app);
 // Assests
 app.use(express.static('public'))
 app.use(favicon(__dirname + '/public/favicon.ico'));
-app.listen(PORT, () => {
+
+const server=app.listen(PORT, () => {
     console.log(`server is started at ${PORT}`);
+})
+
+
+const io=require('socket.io')(server)
+io.on('connection',(socket)=>{
+    // Join Orders
+    socket.on('join',(orderId)=>{
+        console.log(orderId)
+socket.join(orderId)
+
+    })
+})
+
+eventEmitter.on('orderUpdated',(data)=>{
+    io.to(`order_${data.id}`).emit('orderUpdated',data)
+})
+eventEmitter.on('orderPlaced',(data)=>{
+    io.to('adminRoom').emit('orderPlaced',data)
 })

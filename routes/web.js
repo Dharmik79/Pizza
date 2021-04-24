@@ -7,7 +7,6 @@ const auth = require('../app/http/middleware/auth')
 const AdminOrderController = require('../app/http/controller/admin/orderController')
 const admin = require('../app/http/middleware/admin')
 
-
 function initRoutes(app) {
 
 
@@ -32,11 +31,12 @@ function initRoutes(app) {
     // Customers routes
     app.post('/orders', auth, orderController().store)
     app.get('/customers/order', auth, orderController().index)
-
+    app.get('/customers/order/:id', auth, orderController().show)
     // Admin routes
 
     app.get('/admin/orders', admin, AdminOrderController().index)
 
+    app.post('/admin/order/status',admin,AdminOrderController().update)
 }
 
 module.exports = initRoutes
