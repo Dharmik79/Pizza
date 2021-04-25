@@ -27,7 +27,7 @@ req.flash('success', "Order Placed Successfully")
                 // Emit the event
                 const eventEmitter = req.app.get('eventEmitter')
                 eventEmitter.emit('orderPlaced', orderPlaced)
-                return res.redirect('/customers/order')
+                          return res.redirect('/customers/order')
                 })
 
                 
