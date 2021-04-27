@@ -15,8 +15,7 @@ const Emitter=require('events')
 
 
 // DataBase Connection
-const url = 'mongodb://localhost:27017/pizza_';
-mongoose.connect(url, {
+mongoose.connect(process.env.MONGO_CONNECTION_URL, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -86,6 +85,12 @@ app.set('views', path.join(__dirname, '/resources/views'))
 app.set('view engine', 'ejs');
 
 require('./routes/web')(app);
+
+
+// Middle ware for Error Page
+app.use((req,res)=>{
+    res.status(404).render('errors/404')
+})
 
 // Assests
 app.use(express.static('public'))
